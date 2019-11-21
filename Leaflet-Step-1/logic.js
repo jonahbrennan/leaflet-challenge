@@ -1,5 +1,6 @@
-// Store our API endpoint inside queryUrl
 
+
+// Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=" +
   "2019-11-19&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
 
@@ -9,10 +10,8 @@ d3.json(queryUrl, function(data) {
   createFeatures(data.features);
 });
 
-
 function createFeatures(earthquakeData) {
   
-
   var earthquakes = L.geoJSON(earthquakeData, {
 
   // Define a function we want to run once for each feature in the features array
@@ -23,7 +22,6 @@ function createFeatures(earthquakeData) {
       "</p>" +  "</h3><hr><p>" + "Magnitude: " + feature.properties.mag + "</p>" +
       "</p>" +  "</h3><hr><p>" + "Location: " + feature.geometry.coordinates + "</p>" +
       "</p>" +  "</h3><hr><p>" + "Tsunami: " + feature.properties.tsunami + "</p>" 
-
       )},
 
     pointToLayer: function(feature, latlng){
@@ -120,20 +118,58 @@ function createMap(earthquakes) {
   //   }).addTo(myMap);
   // });
 
-  // Create overlay object to hold our overlay layer
-  var overlayMaps = {
-    Earthquakes: earthquakes, 
-    Plates: earthquakes
-  };
+  var link = "data/PB2002_plates.json";
+  d3.json(link, function(data) {
+    // Once we get a response, send the data.features object to the createFeatures function
+    var plates = L.geoJson(data, {
+  
+      style: function(plates) {
+        return {
+          color:  "magenta", // chooseColor(feature.properties.PlateName), // "white", 
+          opacity: .3,
+          fillColor: "white", 
+          fillOpacity: 0.0,
+          weight: 1
+        };
+      }
+    }); // .addTo(myMap);
+  console.log(plates);
 
-  // Create our map, giving it the streetmap and earthquakes layers to display on load
-  var myMap = L.map("map", {
-    center: [
-      37.09, -25.71
-    ],
-    zoom: 3,
-    layers: [streetmap, earthquakes]
-  });
+    // Create overlay object to hold our overlay layer
+    var overlayMaps = {
+      Earthquakes: earthquakes, 
+      Plates: plates
+    };
+  
+    // Create our map, giving it the streetmap and earthquakes layers to display on load
+    var myMap = L.map("map", {
+      center: [
+        37.09, -25.71
+      ],
+      zoom: 3,
+      layers: [streetmap, earthquakes, plates]
+    });
+    L.control.layers(baseMaps, overlayMaps,  {
+      collapsed: false
+    }).addTo(myMap);
+  })
+  
+  };
+  // // Create overlay object to hold our overlay layer
+  // var overlayMaps = {
+  //   Earthquakes: earthquakes, 
+  //   // Plates: plates
+  // };
+
+  // // Create our map, giving it the streetmap and earthquakes layers to display on load
+  // var myMap = L.map("map", {
+  //   center: [
+  //     37.09, -25.71
+  //   ],
+  //   zoom: 3,
+  //   layers: [streetmap, earthquakes]
+  // });
+
 
 
   // function chooseColor(PlateName) {
@@ -178,10 +214,10 @@ function createMap(earthquakes) {
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
-  L.control.layers(baseMaps, overlayMaps,  {
-    collapsed: false
-  }).addTo(myMap);
-}
+//   L.control.layers(baseMaps, overlayMaps,  {
+//     collapsed: false
+//   }).addTo(myMap);
+// }
 
 
 
