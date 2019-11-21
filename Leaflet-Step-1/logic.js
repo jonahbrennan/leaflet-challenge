@@ -26,32 +26,29 @@ function createFeatures(earthquakeData) {
 
     pointToLayer: function(feature, latlng){
 
-      // colorMag = "";
-      // radiusMag = "";
-
         if (feature.properties.mag < 5.2) {
           colorMag = "yellow";
-          radiusMag = (feature.properties.mag ) *5000;
+          radiusMag = (feature.properties.mag ) *7000;
         }
-        else if (feature.properties.mag >= 5.2 && feature.properties.mag < 6.6) {
+        else if (feature.properties.mag >= 5.2 && feature.properties.mag < 6.4) {
           colorMag = "orange";
-          radiusMag = (feature.properties.mag ) *5000;
+          radiusMag = (feature.properties.mag ) *10000;
         }   
         else if (feature.properties.tsunami) {
           colorMag = "blue";
-          radiusMag = (feature.properties.mag *2) *5000;
+          radiusMag = (feature.properties.mag *2) *10000;
         }   
         else  {
           colorMag = "red";
-          radiusMag = (feature.properties.mag *2) *5000;
+          radiusMag = (feature.properties.mag *2) *10000;
         }
         var geojsonMarkerOptions = {
           radius: radiusMag,
-          fillColor: "#ff7800",
+          fillColor: colorMag,
           color: colorMag,
           weight: 3,
           opacity: 1,
-          fillOpacity: 0.0
+          fillOpacity: 0.5
       };
         // return new L.circle(latlng, {
         //   // color: 'red',
@@ -60,24 +57,20 @@ function createFeatures(earthquakeData) {
         //   radius:  radiusMag,
         //   color: colorMag
         // })
-        return new L.circle(latlng, geojsonMarkerOptions )
+        return L.circle(latlng, geojsonMarkerOptions )
       }
     })
   
   // // Create a GeoJSON layer containing the features array on the earthquakeData object
   // // Run the onEachFeature function once for each piece of data in the array
   // var earthquakes = L.geoJSON(earthquakeData, {
-
   //   onEachFeature: onEachFeature,
   //   pointToLayer: pointToLayer
-
   // });
 
   // Sending our earthquakes layer to the createMap function
   createMap(earthquakes);
-
 }
-
 
 function createMap(earthquakes) {
 
@@ -102,22 +95,6 @@ function createMap(earthquakes) {
     "Dark Map": darkmap
   };
 
-  // var link = "data/PB2002_plates.json";
-  // d3.json(link, function(data) {
-  //   // Creating a geoJSON layer with the retrieved data
-  //   L.geoJson(data, {
-  //     style: function(feature) {
-  //       return {
-  //         color:  "magenta", // chooseColor(feature.properties.PlateName), // "white", 
-  //         opacity: .3,
-  //         fillColor: "white", 
-  //         fillOpacity: 0.0,
-  //         weight: 1
-  //       };
-  //     }
-  //   }).addTo(myMap);
-  // });
-
   var link = "data/PB2002_plates.json";
   d3.json(link, function(data) {
     // Once we get a response, send the data.features object to the createFeatures function
@@ -140,9 +117,7 @@ function createMap(earthquakes) {
     // Create overlay object to hold our overlay layer
     var overlayMaps = {
       Plates: plates,
-
       Earthquakes: earthquakes, 
-      // Plates: plates
     };
   
     // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -160,6 +135,7 @@ function createMap(earthquakes) {
   })
   
   };
+
   // // Create overlay object to hold our overlay layer
   // var overlayMaps = {
   //   Earthquakes: earthquakes, 
