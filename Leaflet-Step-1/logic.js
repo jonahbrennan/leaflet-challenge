@@ -1,8 +1,8 @@
 
 
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=" +
-  "2019-11-19&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
+var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-11-01&endtime=" +
+  "2019-11-20&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
@@ -126,28 +126,33 @@ function createMap(earthquakes) {
       style: function(plates) {
         return {
           color:  "magenta", // chooseColor(feature.properties.PlateName), // "white", 
-          opacity: .3,
+          opacity: .8,
           fillColor: "white", 
           fillOpacity: 0.0,
-          weight: 1
+          weight: 1,
+          // pointerEvents: 'none',
+          // zIndex: 650
         };
       }
     }); // .addTo(myMap);
-  console.log(plates);
+  // console.log(plates);
 
     // Create overlay object to hold our overlay layer
     var overlayMaps = {
+      Plates: plates,
+
       Earthquakes: earthquakes, 
-      Plates: plates
+      // Plates: plates
     };
   
     // Create our map, giving it the streetmap and earthquakes layers to display on load
     var myMap = L.map("map", {
+      worldCopyJump: true,
       center: [
-        37.09, -25.71
+        37.09, -70.00
       ],
       zoom: 3,
-      layers: [streetmap, earthquakes, plates]
+      layers: [streetmap, plates,earthquakes]
     });
     L.control.layers(baseMaps, overlayMaps,  {
       collapsed: false
