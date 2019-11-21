@@ -129,12 +129,51 @@ function createMap(earthquakes) {
       zoom: 3,
       layers: [streetmap, plates,earthquakes]
     });
+
     L.control.layers(baseMaps, overlayMaps,  {
       collapsed: false
     }).addTo(myMap);
+
+    function getColor(d) {
+      return d >= 8 ? 'blue' :
+            //  d > 8  ? 'red' :
+             d > 6.4  ? 'red' :
+             d > 5.2  ? 'orange' :
+            //  d > 5   ? 'yellow' :
+             d > 4   ? 'yellow' :
+             d > 0   ? 'white' :
+                        'blue';
+  }
+  
+  var legend = L.control({position: 'bottomright'});
+  
+  legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create("div", "legend");
+    div.innerHTML += "<h4>Tegnforklaring</h4>";
+
+      var div = L.DomUtil.create('div', 'info legend');
+          grades = [0, 4, 5.2, 6.4, 'tsunami'],
+          labels = [];
+          div.innerHTML += "<h4>Magnitude</h4>";
+  
+      // loop through our density intervals and generate a label with a colored square for each interval
+      for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      }
+  
+      return div;
+  };
+  
+  legend.addTo(myMap);
+  
+    
   })
   
   };
+
 
   // // Create overlay object to hold our overlay layer
   // var overlayMaps = {
