@@ -1,4 +1,13 @@
 
+var query2015 = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2015-01-01&endtime=" +
+"2015-12-31&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
+var query2016 = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2016-01-01&endtime=" +
+"2016-12-31&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
+var query2017 = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2017-01-01&endtime=" +
+"2017-12-31&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
+var query2018 = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=" +
+"2018-12-31&maxlongitude=180&minlongitude=-180&maxlatitude=70&minlatitude=-70&minmagnitude=5";
+
 
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-11-01&endtime=" +
@@ -70,7 +79,9 @@ function createFeatures(earthquakeData) {
 
   // Sending our earthquakes layer to the createMap function
   createMap(earthquakes);
+  // console.log(earthquakes);
 }
+
 
 function createMap(earthquakes) {
 
@@ -95,7 +106,7 @@ function createMap(earthquakes) {
     "Dark Map": darkmap
   };
 
-  var link = "data/PB2002_plates.json";
+  var link = "Leaflet-Step-1/data/PB2002_plates.json";
   d3.json(link, function(data) {
     // Once we get a response, send the data.features object to the createFeatures function
     var plates = L.geoJson(data, {
@@ -114,10 +125,13 @@ function createMap(earthquakes) {
     }); // .addTo(myMap);
   // console.log(plates);
 
+
+
     // Create overlay object to hold our overlay layer
     var overlayMaps = {
       Plates: plates,
-      Earthquakes: earthquakes, 
+      Earthquakes: earthquakes,
+      // Earthquakes2015: earthquakes2015, 
     };
   
     // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -127,19 +141,19 @@ function createMap(earthquakes) {
         37.09, -70.00
       ],
       zoom: 3,
-      layers: [streetmap, plates,earthquakes]
+      layers: [streetmap, plates, earthquakes]
     });
 
     L.control.layers(baseMaps, overlayMaps,  {
       collapsed: false
     }).addTo(myMap);
 
+
+////////// LEGEND /////////////////////////////
     function getColor(d) {
       return d >= 8 ? 'blue' :
-            //  d > 8  ? 'red' :
              d > 6.4  ? 'red' :
              d > 5.2  ? 'orange' :
-            //  d > 5   ? 'yellow' :
              d > 4   ? 'yellow' :
              d > 0   ? 'white' :
                         'blue';
@@ -148,9 +162,6 @@ function createMap(earthquakes) {
   var legend = L.control({position: 'bottomright'});
   
   legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create("div", "legend");
-    div.innerHTML += "<h4>Tegnforklaring</h4>";
 
       var div = L.DomUtil.create('div', 'info legend');
           grades = [0, 4, 5.2, 6.4, 'tsunami'],
