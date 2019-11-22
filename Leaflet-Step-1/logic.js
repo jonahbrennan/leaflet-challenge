@@ -32,24 +32,34 @@ function createFeatures(earthquakeData) {
 
         if (feature.properties.mag < 5.2) {
           colorMag = "yellow";
-          radiusMag = (feature.properties.mag ) *7000;
+          radiusMag = (feature.properties.mag ) *20000;
         }
         else if (feature.properties.mag >= 5.2 && feature.properties.mag < 6.4) {
           colorMag = "orange";
-          radiusMag = (feature.properties.mag ) *10000;
+          radiusMag = (feature.properties.mag ) *24000;
         }   
         else if (feature.properties.tsunami) {
           colorMag = "blue";
-          radiusMag = (feature.properties.mag *2) *10000;
+          radiusMag = (feature.properties.mag *1.4) *24000;
         }   
         else  {
           colorMag = "red";
-          radiusMag = (feature.properties.mag *2) *10000;
+          radiusMag = (feature.properties.mag *1.4) *24000;
         }
+
+        function getColor(d) {
+          return d >= 8 ? 'blue' :
+                 d > 6.4  ? 'red' :
+                 d > 5.2  ? 'orange' :
+                 d > 4   ? 'yellow' :
+                 d > 0   ? 'white' :
+                            'blue';
+      }
+
         var geojsonMarkerOptions = {
           radius: radiusMag,
           fillColor: colorMag,
-          color: colorMag,
+          color: getColor(feature.properties.mag),
           weight: 3,
           opacity: 1,
           fillOpacity: 0.5
@@ -86,28 +96,40 @@ function createFeatures2015(earthquakeData2015) {
 
         if (feature.properties.mag < 5.2) {
           colorMag = "yellow";
-          radiusMag = (feature.properties.mag ) *7000;
+          radiusMag = (feature.properties.mag ) *20000;
         }
         else if (feature.properties.mag >= 5.2 && feature.properties.mag < 6.4) {
           colorMag = "orange";
-          radiusMag = (feature.properties.mag ) *10000;
+          radiusMag = (feature.properties.mag ) *24000;
         }   
         else if (feature.properties.tsunami) {
           colorMag = "blue";
-          radiusMag = (feature.properties.mag *2) *10000;
+          radiusMag = (feature.properties.mag *1.4) *24000;
         }   
         else  {
           colorMag = "red";
-          radiusMag = (feature.properties.mag *2) *10000;
+          radiusMag = (feature.properties.mag *1.4) *24000;
         }
+
+        function getColor(d) {
+          return d >= 8 ? 'blue' :
+                 d > 6.4  ? 'red' :
+                 d > 5.2  ? 'orange' :
+                 d > 4   ? 'yellow' :
+                 d > 0   ? 'white' :
+                            'blue';
+      }
+
         var geojsonMarkerOptions = {
           radius: radiusMag,
           fillColor: colorMag,
-          color: colorMag,
+          color: getColor(feature.properties.mag),
           weight: 3,
           opacity: 1,
           fillOpacity: 0.5
       };
+
+    
         // return new L.circle(latlng, {
         //   // color: 'red',
         //   fillColor: '#f03',
